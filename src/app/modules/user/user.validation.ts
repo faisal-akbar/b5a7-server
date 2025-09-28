@@ -36,10 +36,6 @@ export const createUserBaseZodSchema = z.object({
     .optional(),
 });
 
-export const createUserZodSchema = createUserBaseZodSchema.extend({
-  role: z.enum([Role.USER] as [string, ...string[]]),
-});
-
 export const createAdminZodSchema = createUserBaseZodSchema.extend({
   role: z.enum([Role.ADMIN, Role.SUPER_ADMIN] as [string, ...string[]]),
 });
