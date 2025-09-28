@@ -48,7 +48,14 @@ const createAdmin = async (
   payload: Partial<User>,
   decodedToken: JwtPayload
 ) => {
-  const { email, password, role, ...rest } = payload;
+  const { name, email, password, ...rest } = payload;
+
+  if (!name || !email || !password) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Name, Email, Password are required"
+    );
+  }
 
   const isUserExist = await prisma.user.findUnique({ where: { email } });
 
@@ -70,8 +77,11 @@ const createAdmin = async (
 
   const user = await prisma.user.create({
     data: {
+      name,
       email,
       password: hashedPassword,
+      isVerified: true,
+      ...rest,
     },
   });
 
