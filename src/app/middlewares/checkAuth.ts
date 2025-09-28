@@ -1,9 +1,9 @@
+import { IsActive } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
 import httpStatus from "http-status-codes";
 import { JwtPayload } from "jsonwebtoken";
+import { prisma } from "../config/db";
 import { envVars } from "../config/env";
-import { IsActive } from "../modules/user/user.interface";
-import { User } from "../modules/user/user.model";
 import AppError from "../utils/errorHelpers/AppError";
 import { verifyToken } from "../utils/jwt/jwt";
 
@@ -22,7 +22,9 @@ export const checkAuth =
         envVars.JWT_ACCESS_SECRET
       ) as JwtPayload;
 
-      const isUserExist = await User.findOne({ email: verifiedToken.email });
+      const isUserExist = await prisma.user.findUnique({
+        where: { email: verifiedToken.email },
+      });
 
       if (!isUserExist) {
         throw new AppError(httpStatus.NOT_FOUND, "User does not exist");

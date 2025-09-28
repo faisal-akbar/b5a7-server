@@ -1,14 +1,14 @@
+import { IsActive, User } from "@prisma/client";
 import httpStatus from "http-status-codes";
 import { JwtPayload } from "jsonwebtoken";
+import { prisma } from "../../config/db";
 import { envVars } from "../../config/env";
-import { IsActive, IUser } from "../../modules/user/user.interface";
-import { User } from "../../modules/user/user.model";
 import AppError from "../errorHelpers/AppError";
 import { generateToken, verifyToken } from "./jwt";
 
-export const createUserTokens = (user: Partial<IUser>) => {
+export const createUserTokens = (user: Partial<User>) => {
   const jwtPayload = {
-    userId: user._id,
+    userId: user.id,
     email: user.email,
     role: user.role,
   };
@@ -38,7 +38,9 @@ export const createNewAccessTokenWithRefreshToken = async (
     envVars.JWT_REFRESH_SECRET
   ) as JwtPayload;
 
-  const isUserExist = await User.findOne({ email: verifiedRefreshToken.email });
+  const isUserExist = await prisma.user.findUnique({
+    where: { email: verifiedRefreshToken.email },
+  });
 
   if (!isUserExist) {
     throw new AppError(httpStatus.NOT_FOUND, "User does not exist");
@@ -57,7 +59,7 @@ export const createNewAccessTokenWithRefreshToken = async (
   }
 
   const jwtPayload = {
-    userId: isUserExist._id,
+    userId: isUserExist.id,
     email: isUserExist.email,
     role: isUserExist.role,
   };

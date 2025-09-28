@@ -1,13 +1,13 @@
-import { UserRole } from "@prisma/client";
-import * as bcrypt from "bcrypt";
+import { Role } from "@prisma/client";
+import * as bcrypt from "bcryptjs";
+import { prisma } from "../config/db";
 import { envVars } from "../config/env";
-import prisma from "../src/shared/prisma";
 
-const seedSuperAdmin = async () => {
+export const seedSuperAdmin = async () => {
   try {
     const isExistSuperAdmin = await prisma.user.findFirst({
       where: {
-        role: UserRole.SUPER_ADMIN,
+        role: Role.SUPER_ADMIN,
       },
     });
 
@@ -23,16 +23,11 @@ const seedSuperAdmin = async () => {
 
     const superAdminData = await prisma.user.create({
       data: {
+        name: "Super admin",
+        role: Role.SUPER_ADMIN,
         email: envVars.SUPER_ADMIN_EMAIL,
         password: hashedPassword,
-        role: UserRole.SUPER_ADMIN,
-        admin: {
-          create: {
-            name: "Super Admin",
-            email: envVars.SUPER_ADMIN_EMAIL,
-            contactNumber: "01234567890",
-          },
-        },
+        isVerified: true,
       },
     });
 
@@ -43,5 +38,3 @@ const seedSuperAdmin = async () => {
     await prisma.$disconnect();
   }
 };
-
-seedSuperAdmin();

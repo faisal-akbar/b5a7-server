@@ -1,5 +1,5 @@
+import { IsActive, Role } from "@prisma/client";
 import z from "zod";
-import { IsActive, Role } from "./user.interface";
 
 export const createUserBaseZodSchema = z.object({
   name: z
@@ -30,22 +30,18 @@ export const createUserBaseZodSchema = z.object({
         "Phone number must be valid for Bangladesh. Format: +8801XXXXXXXXX or 01XXXXXXXXX",
     })
     .optional(),
-  defaultAddress: z
-    .string({ invalid_type_error: "Address must be string" })
-    .max(200, { message: "Address cannot exceed 200 characters." })
+  picture: z
+    .string({ invalid_type_error: "Picture must be string" })
+    .url({ message: "Picture must be a valid URL." })
     .optional(),
 });
 
-export const createSenderReceiverZodSchema = createUserBaseZodSchema.extend({
-  role: z.enum([Role.SENDER, Role.RECEIVER] as [string, ...string[]]),
+export const createUserZodSchema = createUserBaseZodSchema.extend({
+  role: z.enum([Role.USER] as [string, ...string[]]),
 });
 
 export const createAdminZodSchema = createUserBaseZodSchema.extend({
   role: z.enum([Role.ADMIN, Role.SUPER_ADMIN] as [string, ...string[]]),
-});
-
-export const createDeliveryPersonnelZodSchema = createUserBaseZodSchema.extend({
-  role: z.enum([Role.DELIVERY_PERSONNEL] as [string]),
 });
 
 export const updateUserZodSchema = z.object({
@@ -61,9 +57,9 @@ export const updateUserZodSchema = z.object({
         "Phone number must be valid for Bangladesh. Format: +8801XXXXXXXXX or 01XXXXXXXXX",
     })
     .optional(),
-  defaultAddress: z
-    .string({ invalid_type_error: "Address must be string" })
-    .max(200, { message: "Address cannot exceed 200 characters." })
+  picture: z
+    .string({ invalid_type_error: "Picture must be string" })
+    .url({ message: "Picture must be a valid URL." })
     .optional(),
   role: z.enum(Object.values(Role) as [string]).optional(),
   isActive: z.enum(Object.values(IsActive) as [string]).optional(),
@@ -73,8 +69,4 @@ export const updateUserZodSchema = z.object({
   isVerified: z
     .boolean({ invalid_type_error: "isVerified must be true or false" })
     .optional(),
-});
-
-export const updateUserBlockedStatusSchema = z.object({
-  isActive: z.enum(Object.values(IsActive) as [string]),
 });
