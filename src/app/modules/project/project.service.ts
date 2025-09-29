@@ -1,25 +1,37 @@
 import { Prisma, Project } from "@prisma/client";
+import httpStatus from "http-status-codes";
 import { JwtPayload } from "jsonwebtoken";
 import { deleteImageFromCLoudinary } from "../../config/cloudinary.config";
 import { prisma } from "../../config/db";
 import { IPaginationOptions } from "../../interfaces/pagination";
+import AppError from "../../utils/errorHelpers/AppError";
 import { paginationHelper } from "../../utils/paginationHelper";
 import { projectSearchableFields } from "./project.constant";
 import { IProjectFilterRequest } from "./project.interface";
+
+const convertFilterValue = (key: string, value: any) => {
+  // Convert string booleans to actual booleans
+  if (key === "isFeatured" || key === "isPublished") {
+    if (typeof value === "string") {
+      return value.toLowerCase() === "true";
+    }
+  }
+  return value;
+};
 
 const createProject = async (payload: Project, decodedToken: JwtPayload) => {
   const existingProject = await prisma.project.findFirst({
     where: { title: payload.title },
   });
   if (existingProject) {
-    throw new Error("A project with this title already exists.");
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "A project with this title already exists."
+    );
   }
-
-  console.log("Creating project with payload:", payload);
 
   // Generate slug from title if not provided
   const slug = payload.title.toLowerCase().split(" ").join("-");
-  console.log("Generated slug:", slug);
 
   const project = await prisma.project.create({
     data: { ...payload, slug, ownerId: decodedToken.userId },
@@ -33,7 +45,7 @@ const getAllProjects = async (
   options: IPaginationOptions
 ) => {
   const { limit, page, skip } = paginationHelper.calculatePagination(options);
-  const { searchTerm, ...filterData } = filters;
+  const { searchTerm, techStack, ...filterData } = filters;
 
   const andConditions = [];
 
@@ -48,12 +60,24 @@ const getAllProjects = async (
     });
   }
 
+  if (techStack) {
+    andConditions.push({
+      techStack: {
+        hasSome: Array.isArray(techStack) ? techStack : [techStack],
+      },
+    });
+  }
+
   if (Object.keys(filterData).length > 0) {
     andConditions.push({
       AND: Object.keys(filterData).map((key) => {
+        const convertedValue = convertFilterValue(
+          key,
+          (filterData as any)[key]
+        );
         return {
           [key]: {
-            equals: (filterData as any)[key],
+            equals: convertedValue,
           },
         };
       }),
@@ -93,6 +117,7 @@ const getAllProjects = async (
 
 const getSingleProject = async (slug: string) => {
   const project = await prisma.project.findUnique({ where: { slug } });
+
   return {
     data: project,
   };
@@ -102,7 +127,7 @@ const updateProject = async (id: number, payload: Partial<Project>) => {
   const existingProject = await prisma.project.findUnique({ where: { id } });
 
   if (!existingProject) {
-    throw new Error("Project not found.");
+    throw new AppError(httpStatus.NOT_FOUND, "Project Not Found");
   }
 
   const duplicateProject = await prisma.project.findFirst({
@@ -113,7 +138,10 @@ const updateProject = async (id: number, payload: Partial<Project>) => {
   });
 
   if (duplicateProject) {
-    throw new Error("A project with this title already exists.");
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "A project with this title already exists."
+    );
   }
 
   const slug = payload.title
