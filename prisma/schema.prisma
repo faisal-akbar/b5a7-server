@@ -33,8 +33,9 @@ model Blog {
   content     String
   excerpt     String
   tags        String[]
-  featured    Boolean  @default(false)
-  published   Boolean  @default(false)
+  isFeatured  Boolean  @default(false)
+  isPublished Boolean  @default(false)
+  views       Int      @default(0)
   author      User     @relation(fields: [authorId], references: [id])
   authorId    Int
   createdAt   DateTime @default(now())
@@ -44,11 +45,15 @@ model Blog {
 model Project {
   id          Int      @id @default(autoincrement())
   title       String
+  slug        String   @unique
   description String
   projectLink String
   liveSite    String
   thumbnail   String
   features    String[]
+  techStack   String[]
+  isFeatured  Boolean  @default(false)
+  isPublished Boolean  @default(false)
   ownerId     Int
   owner       User     @relation(fields: [ownerId], references: [id])
   createdAt   DateTime @default(now())

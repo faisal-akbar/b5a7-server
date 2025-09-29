@@ -1,18 +1,12 @@
 import { Response } from "express";
-
-interface TMeta {
-  page: number;
-  limit: number;
-  totalPage: number;
-  total: number;
-}
+import { IPaginationOptions } from "../interfaces/pagination";
 
 interface TResponse<T> {
   statusCode: number;
   success: boolean;
   message: string;
   data: T;
-  meta?: TMeta;
+  meta?: IPaginationOptions;
 }
 
 export const sendResponse = <T>(res: Response, data: TResponse<T>) => {

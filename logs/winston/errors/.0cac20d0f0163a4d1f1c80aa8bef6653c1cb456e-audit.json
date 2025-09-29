@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "/Volumes/my_store/next-level-web-dev-batch5/assignment_7/b5a7-server/logs/winston/errors/.0cac20d0f0163a4d1f1c80aa8bef6653c1cb456e-audit.json",
+    "files": [
+        {
+            "date": 1759115540267,
+            "name": "/Volumes/my_store/next-level-web-dev-batch5/assignment_7/b5a7-server/logs/winston/errors/phu-2025-28-09-23-error.log",
+            "hash": "f21a3eb589bf195408e14b854a5303624d3861fe24893ee37f8d74b4b407886b"
+        }
+    ],
+    "hashType": "sha256"
+}
