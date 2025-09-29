@@ -1,6 +1,7 @@
 import { Prisma, Project } from "@prisma/client";
 import httpStatus from "http-status-codes";
 import { JwtPayload } from "jsonwebtoken";
+import slugify from "slugify";
 import { deleteImageFromCLoudinary } from "../../config/cloudinary.config";
 import { prisma } from "../../config/db";
 import { IPaginationOptions } from "../../interfaces/pagination";
@@ -30,8 +31,7 @@ const createProject = async (payload: Project, decodedToken: JwtPayload) => {
     );
   }
 
-  // Generate slug from title if not provided
-  const slug = payload.title.toLowerCase().split(" ").join("-");
+  const slug = slugify(payload.title, { lower: true });
 
   const project = await prisma.project.create({
     data: { ...payload, slug, ownerId: decodedToken.userId },
@@ -145,7 +145,7 @@ const updateProject = async (id: number, payload: Partial<Project>) => {
   }
 
   const slug = payload.title
-    ? payload.title.toLowerCase().split(" ").join("-")
+    ? slugify(payload.title, { lower: true })
     : existingProject.slug;
 
   const updatedProject = await prisma.project.update({

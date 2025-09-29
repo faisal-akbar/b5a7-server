@@ -1,6 +1,6 @@
-export interface IProjectFilterRequest {
+export interface IBlogFilterRequest {
   searchTerm?: string | undefined;
-  techStack?: string | undefined;
+  tags?: string | undefined;
   isFeatured?: boolean | undefined;
   isPublished?: boolean | undefined;
 }
