@@ -37,7 +37,10 @@ const updateUser = async (
 };
 
 const getMe = async (userId: number) => {
-  const user = await prisma.user.findUnique({ where: { id: userId } });
+  const user = await prisma.user.findUnique({
+    omit: { password: true },
+    where: { id: userId },
+  });
 
   return {
     data: user,

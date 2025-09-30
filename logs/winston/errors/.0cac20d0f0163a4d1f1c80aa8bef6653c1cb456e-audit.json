@@ -24,6 +24,11 @@
             "date": 1759159116110,
             "name": "/Volumes/my_store/next-level-web-dev-batch5/assignment_7/b5a7-server/logs/winston/errors/phu-2025-29-09-11-error.log",
             "hash": "efa363a2bef063fb92180c8f8c4dd4aefadbf9c4b04b2b0c31ed53a74028d33a"
+        },
+        {
+            "date": 1759202601896,
+            "name": "/Volumes/my_store/next-level-web-dev-batch5/assignment_7/b5a7-server/logs/winston/errors/phu-2025-29-09-23-error.log",
+            "hash": "328e72fcd0468f9979b2e6cb83c54dca18afbce0ce1076a3e92a54c72dde94e8"
         }
     ],
     "hashType": "sha256"
