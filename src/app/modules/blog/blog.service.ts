@@ -30,6 +30,7 @@ const createBlog = async (payload: Blog, decodedToken: JwtPayload) => {
       "A blog with this title already exists."
     );
   }
+  console.log(payload);
 
   const slug = slugify(payload.title, { lower: true });
 
