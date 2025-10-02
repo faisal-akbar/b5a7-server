@@ -39,6 +39,17 @@ const getAllBlogs = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getBlogById = catchAsync(async (req: Request, res: Response) => {
+  const blogId = parseInt(req.params.id);
+  const result = await BlogService.getBlogById(blogId);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Blog retrieved successfully",
+    data: result.data,
+  });
+});
+
 const getSingleBlog = catchAsync(async (req: Request, res: Response) => {
   const slug = req.params.slug;
   const result = await BlogService.getSingleBlog(slug);
@@ -46,7 +57,7 @@ const getSingleBlog = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: "Blog retrieved successfully",
-    data: result,
+    data: result.data,
   });
 });
 
@@ -74,10 +85,23 @@ const deleteBlog = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getBlogViews = catchAsync(async (req: Request, res: Response) => {
+  const { slug } = req.params;
+  const views = await BlogService.getBlogViews(slug);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Blog views retrieved successfully",
+    data: views,
+  });
+});
+
 export const BlogController = {
   createBlog,
   getAllBlogs,
+  getBlogById,
   getSingleBlog,
   updateBlog,
   deleteBlog,
+  getBlogViews,
 };

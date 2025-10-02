@@ -98,7 +98,11 @@ const getAllProjects = async (
             createdAt: "desc",
           },
     include: {
-      owner: true,
+      owner: {
+        select: {
+          name: true,
+        },
+      },
     },
   });
   const total = await prisma.project.count({

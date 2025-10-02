@@ -46,7 +46,7 @@ const getSingleProject = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: "Project retrieved successfully",
-    data: result,
+    data: result.data,
   });
 });
 

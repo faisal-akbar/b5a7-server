@@ -30,7 +30,6 @@ const createBlog = async (payload: Blog, decodedToken: JwtPayload) => {
       "A blog with this title already exists."
     );
   }
-  console.log(payload);
 
   const slug = slugify(payload.title, { lower: true });
 
@@ -99,7 +98,11 @@ const getAllBlogs = async (
             createdAt: "desc",
           },
     include: {
-      author: true,
+      author: {
+        select: {
+          name: true,
+        },
+      },
     },
   });
   const total = await prisma.blog.count({
@@ -116,8 +119,27 @@ const getAllBlogs = async (
   };
 };
 
+const getBlogById = async (id: number) => {
+  const blog = await prisma.blog.findUnique({ where: { id } });
+  if (!blog) {
+    throw new AppError(httpStatus.NOT_FOUND, "Blog Not Found");
+  }
+  return {
+    data: blog,
+  };
+};
+
 const getSingleBlog = async (slug: string) => {
-  const blog = await prisma.blog.findUnique({ where: { slug } });
+  const blog = await prisma.blog.findUnique({
+    where: {
+      slug,
+      isPublished: true,
+    },
+  });
+
+  if (!blog) {
+    throw new AppError(httpStatus.NOT_FOUND, "Blog Not Found");
+  }
 
   return {
     data: blog,
@@ -165,10 +187,30 @@ const deleteBlog = async (id: number) => {
   return await prisma.blog.delete({ where: { id } });
 };
 
+const getBlogViews = async (slug: string) => {
+  return await prisma.$transaction(async (tx) => {
+    await tx.blog.update({
+      where: { slug },
+      data: {
+        views: {
+          increment: 1,
+        },
+      },
+    });
+
+    return await tx.blog.findUnique({
+      where: { slug },
+      select: { views: true },
+    });
+  });
+};
+
 export const BlogService = {
   createBlog,
   getSingleBlog,
+  getBlogById,
   getAllBlogs,
   updateBlog,
   deleteBlog,
+  getBlogViews,
 };

@@ -19,6 +19,13 @@ router.post(
   BlogController.createBlog
 );
 
+router.get("/views/:slug", BlogController.getBlogViews);
+router.get(
+  "/id/:id",
+  checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
+  BlogController.getBlogById
+);
+
 router.get("/:slug", BlogController.getSingleBlog);
 router.patch(
   "/:id",

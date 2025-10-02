@@ -6,39 +6,9 @@
     "auditLog": "/Volumes/my_store/next-level-web-dev-batch5/assignment_7/b5a7-server/logs/winston/errors/.0cac20d0f0163a4d1f1c80aa8bef6653c1cb456e-audit.json",
     "files": [
         {
-            "date": 1759115540267,
-            "name": "/Volumes/my_store/next-level-web-dev-batch5/assignment_7/b5a7-server/logs/winston/errors/phu-2025-28-09-23-error.log",
-            "hash": "f21a3eb589bf195408e14b854a5303624d3861fe24893ee37f8d74b4b407886b"
-        },
-        {
-            "date": 1759118898044,
-            "name": "/Volumes/my_store/next-level-web-dev-batch5/assignment_7/b5a7-server/logs/winston/errors/phu-2025-29-09-00-error.log",
-            "hash": "b9dfc5253e8701ef9c551accaa4a6c86185ce72578451499e3766ea0dfb8e0c2"
-        },
-        {
-            "date": 1759155412028,
-            "name": "/Volumes/my_store/next-level-web-dev-batch5/assignment_7/b5a7-server/logs/winston/errors/phu-2025-29-09-10-error.log",
-            "hash": "87cd6e2edb531a8dc79dc5d91559e3463c19bcd0943d9319b7061ad2179495df"
-        },
-        {
-            "date": 1759159116110,
-            "name": "/Volumes/my_store/next-level-web-dev-batch5/assignment_7/b5a7-server/logs/winston/errors/phu-2025-29-09-11-error.log",
-            "hash": "efa363a2bef063fb92180c8f8c4dd4aefadbf9c4b04b2b0c31ed53a74028d33a"
-        },
-        {
-            "date": 1759202601896,
-            "name": "/Volumes/my_store/next-level-web-dev-batch5/assignment_7/b5a7-server/logs/winston/errors/phu-2025-29-09-23-error.log",
-            "hash": "328e72fcd0468f9979b2e6cb83c54dca18afbce0ce1076a3e92a54c72dde94e8"
-        },
-        {
-            "date": 1759275553954,
-            "name": "/Volumes/my_store/next-level-web-dev-batch5/assignment_7/b5a7-server/logs/winston/errors/phu-2025-30-09-19-error.log",
-            "hash": "69b5edb56b4354049d3298de0a9010d613055120e519169669e01f5023beed25"
-        },
-        {
-            "date": 1759353420768,
-            "name": "/Volumes/my_store/next-level-web-dev-batch5/assignment_7/b5a7-server/logs/winston/errors/phu-2025-01-10-17-error.log",
-            "hash": "a46e82f63c2842b22667ac929767167eaff4c54eacf3525227eb6c542900970e"
+            "date": 1759425755621,
+            "name": "/Volumes/my_store/next-level-web-dev-batch5/assignment_7/b5a7-server/logs/winston/errors/phu-2025-02-10-13-error.log",
+            "hash": "8af1c0492dec057adf55199c210716f36b23e94bd24afc011fafe50aefab5652"
         }
     ],
     "hashType": "sha256"
