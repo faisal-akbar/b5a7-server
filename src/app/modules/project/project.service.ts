@@ -119,6 +119,16 @@ const getAllProjects = async (
   };
 };
 
+const getProjectById = async (id: number) => {
+  const project = await prisma.project.findUnique({ where: { id } });
+  if (!project) {
+    throw new AppError(httpStatus.NOT_FOUND, "Project Not Found");
+  }
+  return {
+    data: project,
+  };
+};
+
 const getSingleProject = async (slug: string) => {
   const project = await prisma.project.findUnique({ where: { slug } });
 
@@ -170,6 +180,7 @@ const deleteProject = async (id: number) => {
 
 export const ProjectService = {
   createProject,
+  getProjectById,
   getSingleProject,
   getAllProjects,
   updateProject,

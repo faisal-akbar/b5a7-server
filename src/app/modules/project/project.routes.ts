@@ -22,6 +22,12 @@ router.post(
   ProjectController.createProject
 );
 
+router.get(
+  "/id/:id",
+  checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
+  ProjectController.getProjectById
+);
+
 router.get("/:slug", ProjectController.getSingleProject);
 router.patch(
   "/:id",
