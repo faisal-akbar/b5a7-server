@@ -66,7 +66,7 @@ const createAdmin = async (
     throw new AppError(httpStatus.BAD_REQUEST, "User Already Exist");
   }
 
-  if (decodedToken.role == Role.ADMIN && role === Role.SUPER_ADMIN) {
+  if (decodedToken.role == Role.ADMIN && payload.role === Role.SUPER_ADMIN) {
     throw new AppError(
       httpStatus.FORBIDDEN,
       "You are not authorized to create SUPER_ADMIN"

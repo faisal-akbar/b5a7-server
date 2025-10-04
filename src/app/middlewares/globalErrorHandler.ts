@@ -12,7 +12,6 @@ import AppError from "../utils/errorHelpers/AppError";
 import handleClientError from "../utils/errorHelpers/handleClientError";
 import handleValidationError from "../utils/errorHelpers/handleValidationError";
 import handleZodError from "../utils/errorHelpers/handleZodError";
-import { errorLogger } from "../utils/logger";
 
 const globalErrorHandler: ErrorRequestHandler = async (
   error,
@@ -20,9 +19,8 @@ const globalErrorHandler: ErrorRequestHandler = async (
   res: Response,
   next: NextFunction
 ) => {
-  envVars.NODE_ENV === "development"
-    ? console.log(`🐱‍🏍 globalErrorHandler ~~`, { error })
-    : errorLogger.error(`🐱‍🏍 globalErrorHandler ~~`, error);
+  envVars.NODE_ENV === "development" &&
+    console.log(`🐱‍🏍 globalErrorHandler ~~`, { error });
 
   if (req.file) {
     await deleteImageFromCLoudinary(req.file.path);
