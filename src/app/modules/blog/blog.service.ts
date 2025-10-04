@@ -40,6 +40,15 @@ const createBlog = async (payload: Blog, decodedToken: JwtPayload) => {
   return blog;
 };
 
+// Public -- get published only
+const getAllPublishedBlogs = async (
+  filters: IBlogFilterRequest,
+  options: IPaginationOptions
+) => {
+  return getAllBlogs({ ...filters, isPublished: true }, options);
+};
+
+// Admin, Super Admin -- get published, unpublished
 const getAllBlogs = async (
   filters: IBlogFilterRequest,
   options: IPaginationOptions
@@ -210,6 +219,7 @@ export const BlogService = {
   getSingleBlog,
   getBlogById,
   getAllBlogs,
+  getAllPublishedBlogs,
   updateBlog,
   deleteBlog,
   getBlogViews,

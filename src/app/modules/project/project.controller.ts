@@ -25,6 +25,26 @@ const createProject = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// Public -- get published only
+const getAllPublishedProjects = catchAsync(
+  async (req: Request, res: Response) => {
+    const filters = pick(req.query, projectFilterableFields);
+    const options = pick(req.query, ["limit", "page", "sortBy", "sortOrder"]);
+
+    const result = await ProjectService.getAllPublishedProjects(
+      filters,
+      options
+    );
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Published projects retrieved successfully",
+      data: result.data,
+      meta: result.meta,
+    });
+  }
+);
+
 const getAllProjects = catchAsync(async (req: Request, res: Response) => {
   const filters = pick(req.query, projectFilterableFields);
   const options = pick(req.query, ["limit", "page", "sortBy", "sortOrder"]);
@@ -90,6 +110,7 @@ const deleteProject = catchAsync(async (req: Request, res: Response) => {
 
 export const ProjectController = {
   createProject,
+  getAllPublishedProjects,
   getAllProjects,
   getProjectById,
   getSingleProject,

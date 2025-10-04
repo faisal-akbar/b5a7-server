@@ -25,6 +25,20 @@ const createBlog = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getAllPublishedBlogs = catchAsync(async (req: Request, res: Response) => {
+  const filters = pick(req.query, blogFilterableFields);
+  const options = pick(req.query, ["limit", "page", "sortBy", "sortOrder"]);
+
+  const result = await BlogService.getAllPublishedBlogs(filters, options);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Published blogs retrieved successfully",
+    data: result.data,
+    meta: result.meta,
+  });
+});
+
 const getAllBlogs = catchAsync(async (req: Request, res: Response) => {
   const filters = pick(req.query, blogFilterableFields);
   const options = pick(req.query, ["limit", "page", "sortBy", "sortOrder"]);
@@ -104,4 +118,5 @@ export const BlogController = {
   updateBlog,
   deleteBlog,
   getBlogViews,
+  getAllPublishedBlogs,
 };

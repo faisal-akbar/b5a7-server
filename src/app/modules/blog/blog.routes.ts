@@ -9,7 +9,15 @@ import { createBlogZodSchema, updateBlogZodSchema } from "./blog.validation";
 
 const router = express.Router();
 
-router.get("/", BlogController.getAllBlogs);
+// Admin, Super Admin -- get published, unpublished
+router.get(
+  "/",
+  checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
+  BlogController.getAllBlogs
+);
+
+// public -- get published only
+router.get("/published", BlogController.getAllPublishedBlogs);
 
 router.post(
   "/create",

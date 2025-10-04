@@ -12,7 +12,15 @@ import {
 
 const router = express.Router();
 
-router.get("/", ProjectController.getAllProjects);
+// Public -- get published only
+router.get("/published", ProjectController.getAllPublishedProjects);
+
+// Admin, Super Admin -- get published, unpublished
+router.get(
+  "/",
+  checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
+  ProjectController.getAllProjects
+);
 
 router.post(
   "/create",

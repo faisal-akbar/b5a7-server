@@ -40,6 +40,14 @@ const createProject = async (payload: Project, decodedToken: JwtPayload) => {
   return project;
 };
 
+// Public -- get published only
+const getAllPublishedProjects = async (
+  filters: IProjectFilterRequest,
+  options: IPaginationOptions
+) => {
+  return getAllProjects({ ...filters, isPublished: true }, options);
+};
+
 const getAllProjects = async (
   filters: IProjectFilterRequest,
   options: IPaginationOptions
@@ -185,4 +193,5 @@ export const ProjectService = {
   getAllProjects,
   updateProject,
   deleteProject,
+  getAllPublishedProjects,
 };
