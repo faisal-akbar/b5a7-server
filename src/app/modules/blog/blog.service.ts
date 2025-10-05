@@ -196,21 +196,45 @@ const deleteBlog = async (id: number) => {
   return await prisma.blog.delete({ where: { id } });
 };
 
+// Get current view count without incrementing
 const getBlogViews = async (slug: string) => {
+  const blog = await prisma.blog.findUnique({
+    where: { slug },
+    select: { views: true },
+  });
+
+  if (!blog) {
+    throw new AppError(httpStatus.NOT_FOUND, "Blog not found");
+  }
+
+  return blog;
+};
+
+// Increment view count (for when user actually views the blog)
+const incrementBlogViews = async (slug: string) => {
   return await prisma.$transaction(async (tx) => {
-    await tx.blog.update({
+    // First check if the blog exists
+    const existingBlog = await tx.blog.findUnique({
+      where: { slug },
+      select: { id: true, views: true },
+    });
+
+    if (!existingBlog) {
+      throw new AppError(httpStatus.NOT_FOUND, "Blog not found");
+    }
+
+    // Increment views and return updated count
+    const updatedBlog = await tx.blog.update({
       where: { slug },
       data: {
         views: {
           increment: 1,
         },
       },
-    });
-
-    return await tx.blog.findUnique({
-      where: { slug },
       select: { views: true },
     });
+
+    return updatedBlog;
   });
 };
 
@@ -223,4 +247,5 @@ export const BlogService = {
   updateBlog,
   deleteBlog,
   getBlogViews,
+  incrementBlogViews,
 };

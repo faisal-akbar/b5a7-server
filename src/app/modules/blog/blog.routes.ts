@@ -28,6 +28,7 @@ router.post(
 );
 
 router.get("/views/:slug", BlogController.getBlogViews);
+router.post("/views/:slug/increment", BlogController.incrementBlogViews);
 router.get(
   "/id/:id",
   checkAuth(Role.ADMIN, Role.SUPER_ADMIN),

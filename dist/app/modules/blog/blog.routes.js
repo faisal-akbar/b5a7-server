@@ -18,6 +18,7 @@ router.get("/", (0, checkAuth_1.checkAuth)(client_1.Role.ADMIN, client_1.Role.SU
 router.get("/published", blog_controller_1.BlogController.getAllPublishedBlogs);
 router.post("/create", (0, checkAuth_1.checkAuth)(client_1.Role.ADMIN, client_1.Role.SUPER_ADMIN), multer_config_1.multerUpload.single("file"), (0, validateRequest_1.validateRequest)(blog_validation_1.createBlogZodSchema), blog_controller_1.BlogController.createBlog);
 router.get("/views/:slug", blog_controller_1.BlogController.getBlogViews);
+router.post("/views/:slug/increment", blog_controller_1.BlogController.incrementBlogViews);
 router.get("/id/:id", (0, checkAuth_1.checkAuth)(client_1.Role.ADMIN, client_1.Role.SUPER_ADMIN), blog_controller_1.BlogController.getBlogById);
 router.get("/:slug", blog_controller_1.BlogController.getSingleBlog);
 router.patch("/:id", (0, checkAuth_1.checkAuth)(client_1.Role.ADMIN, client_1.Role.SUPER_ADMIN), multer_config_1.multerUpload.single("file"), (0, validateRequest_1.validateRequest)(blog_validation_1.updateBlogZodSchema), blog_controller_1.BlogController.updateBlog);

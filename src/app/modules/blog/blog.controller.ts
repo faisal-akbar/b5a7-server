@@ -110,6 +110,17 @@ const getBlogViews = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const incrementBlogViews = catchAsync(async (req: Request, res: Response) => {
+  const { slug } = req.params;
+  const views = await BlogService.incrementBlogViews(slug);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Blog views incremented successfully",
+    data: views,
+  });
+});
+
 export const BlogController = {
   createBlog,
   getAllBlogs,
@@ -118,5 +129,6 @@ export const BlogController = {
   updateBlog,
   deleteBlog,
   getBlogViews,
+  incrementBlogViews,
   getAllPublishedBlogs,
 };

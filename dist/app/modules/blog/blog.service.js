@@ -173,20 +173,39 @@ const updateBlog = (id, payload) => __awaiter(void 0, void 0, void 0, function* 
 const deleteBlog = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return yield db_1.prisma.blog.delete({ where: { id } });
 });
+// Get current view count without incrementing
 const getBlogViews = (slug) => __awaiter(void 0, void 0, void 0, function* () {
+    const blog = yield db_1.prisma.blog.findUnique({
+        where: { slug },
+        select: { views: true },
+    });
+    if (!blog) {
+        throw new AppError_1.default(http_status_codes_1.default.NOT_FOUND, "Blog not found");
+    }
+    return blog;
+});
+// Increment view count (for when user actually views the blog)
+const incrementBlogViews = (slug) => __awaiter(void 0, void 0, void 0, function* () {
     return yield db_1.prisma.$transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
-        yield tx.blog.update({
+        // First check if the blog exists
+        const existingBlog = yield tx.blog.findUnique({
+            where: { slug },
+            select: { id: true, views: true },
+        });
+        if (!existingBlog) {
+            throw new AppError_1.default(http_status_codes_1.default.NOT_FOUND, "Blog not found");
+        }
+        // Increment views and return updated count
+        const updatedBlog = yield tx.blog.update({
             where: { slug },
             data: {
                 views: {
                     increment: 1,
                 },
             },
-        });
-        return yield tx.blog.findUnique({
-            where: { slug },
             select: { views: true },
         });
+        return updatedBlog;
     }));
 });
 exports.BlogService = {
@@ -198,4 +217,5 @@ exports.BlogService = {
     updateBlog,
     deleteBlog,
     getBlogViews,
+    incrementBlogViews,
 };
