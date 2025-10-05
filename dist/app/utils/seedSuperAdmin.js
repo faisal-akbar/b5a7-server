@@ -73,8 +73,5 @@ const seedSuperAdmin = () => __awaiter(void 0, void 0, void 0, function* () {
     catch (err) {
         console.error(err);
     }
-    finally {
-        yield db_1.prisma.$disconnect();
-    }
 });
 exports.seedSuperAdmin = seedSuperAdmin;

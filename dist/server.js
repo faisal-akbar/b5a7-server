@@ -14,29 +14,43 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const app_1 = __importDefault(require("./app"));
 const env_1 = require("./app/config/env");
+const db_1 = require("./app/config/db");
 const seedSuperAdmin_1 = require("./app/utils/seedSuperAdmin");
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
-        const server = app_1.default.listen(env_1.envVars.PORT, () => {
-            console.log("Sever is running on port ", env_1.envVars.PORT);
-        });
-        yield (0, seedSuperAdmin_1.seedSuperAdmin)();
-        const exitHandler = () => {
-            if (server) {
-                server.close(() => {
-                    console.info("Server closed!");
-                });
-            }
+        try {
+            // Connect to database first
+            yield (0, db_1.connectDatabase)();
+            const server = app_1.default.listen(env_1.envVars.PORT, () => {
+                console.log("Server is running on port ", env_1.envVars.PORT);
+            });
+            yield (0, seedSuperAdmin_1.seedSuperAdmin)();
+            const exitHandler = () => __awaiter(this, void 0, void 0, function* () {
+                if (server) {
+                    server.close(() => __awaiter(this, void 0, void 0, function* () {
+                        console.info("Server closed!");
+                        yield (0, db_1.disconnectDatabase)();
+                    }));
+                }
+                process.exit(1);
+            });
+            process.on("uncaughtException", (error) => {
+                console.log(error);
+                exitHandler();
+            });
+            process.on("unhandledRejection", (error) => {
+                console.log(error);
+                exitHandler();
+            });
+            // Graceful shutdown on SIGTERM and SIGINT
+            process.on("SIGTERM", exitHandler);
+            process.on("SIGINT", exitHandler);
+        }
+        catch (error) {
+            console.error("Failed to start server:", error);
+            yield (0, db_1.disconnectDatabase)();
             process.exit(1);
-        };
-        process.on("uncaughtException", (error) => {
-            console.log(error);
-            exitHandler();
-        });
-        process.on("unhandledRejection", (error) => {
-            console.log(error);
-            exitHandler();
-        });
+        }
     });
 }
 main();
