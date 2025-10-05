@@ -6,7 +6,7 @@ A modern, scalable backend system for managing personal portfolios, blogs, and p
 
 Live Demo: [Portfolio Project](https://b5a7-server.vercel.app/).
 
-Postman Collection: [Portfolio Project Postman Collection]().
+Postman Collection: [Portfolio Project Postman Collection](https://github.com/faisal-akbar/b5a7-server/blob/main/b5a7-portfolio.postman_collection.json).
 
 ## 🧱 Features
 
