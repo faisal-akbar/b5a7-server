@@ -3,6 +3,7 @@ import cors from "cors";
 import express, { Request, Response } from "express";
 import expressSession from "express-session";
 import { envVars } from "./app/config/env";
+import { ensureDbConnection } from "./app/middlewares/dbConnection";
 import globalErrorHandler from "./app/middlewares/globalErrorHandler";
 import notFound from "./app/middlewares/notFound";
 import { router } from "./app/routes";
@@ -28,7 +29,8 @@ app.use(
   })
 );
 
-app.use("/api/v1", router);
+// Apply database connection middleware to all API routes
+app.use("/api/v1", ensureDbConnection, router);
 
 app.get("/", (req: Request, res: Response) => {
   res.status(200).json({

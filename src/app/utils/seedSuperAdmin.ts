@@ -34,7 +34,5 @@ export const seedSuperAdmin = async () => {
     console.log("Super Admin Created Successfully!", superAdminData);
   } catch (err) {
     console.error(err);
-  } finally {
-    await prisma.$disconnect();
   }
 };
