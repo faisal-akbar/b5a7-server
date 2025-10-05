@@ -149,14 +149,16 @@ const updateBlog = (id, payload) => __awaiter(void 0, void 0, void 0, function* 
     if (!existingBlog) {
         throw new AppError_1.default(http_status_codes_1.default.NOT_FOUND, "Blog Not Found");
     }
-    const duplicateBlog = yield db_1.prisma.blog.findFirst({
-        where: {
-            title: payload.title,
-            id: { not: id },
-        },
-    });
-    if (duplicateBlog) {
-        throw new AppError_1.default(http_status_codes_1.default.BAD_REQUEST, "A blog with this title already exists.");
+    if (payload.title) {
+        const duplicateBlog = yield db_1.prisma.blog.findFirst({
+            where: {
+                title: payload.title,
+                id: { not: id },
+            },
+        });
+        if (duplicateBlog) {
+            throw new AppError_1.default(http_status_codes_1.default.BAD_REQUEST, "A blog with this title already exists.");
+        }
     }
     const slug = payload.title
         ? (0, slugify_1.default)(payload.title, { lower: true })

@@ -152,18 +152,20 @@ const updateProject = async (id: number, payload: Partial<Project>) => {
     throw new AppError(httpStatus.NOT_FOUND, "Project Not Found");
   }
 
-  const duplicateProject = await prisma.project.findFirst({
-    where: {
-      title: payload.title,
-      id: { not: id },
-    },
-  });
+  if (payload.title) {
+    const duplicateProject = await prisma.project.findFirst({
+      where: {
+        title: payload.title,
+        id: { not: id },
+      },
+    });
 
-  if (duplicateProject) {
-    throw new AppError(
-      httpStatus.BAD_REQUEST,
-      "A project with this title already exists."
-    );
+    if (duplicateProject) {
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        "A project with this title already exists."
+      );
+    }
   }
 
   const slug = payload.title

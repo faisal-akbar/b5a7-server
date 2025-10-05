@@ -162,18 +162,20 @@ const updateBlog = async (id: number, payload: Partial<Blog>) => {
     throw new AppError(httpStatus.NOT_FOUND, "Blog Not Found");
   }
 
-  const duplicateBlog = await prisma.blog.findFirst({
-    where: {
-      title: payload.title,
-      id: { not: id },
-    },
-  });
+  if (payload.title) {
+    const duplicateBlog = await prisma.blog.findFirst({
+      where: {
+        title: payload.title,
+        id: { not: id },
+      },
+    });
 
-  if (duplicateBlog) {
-    throw new AppError(
-      httpStatus.BAD_REQUEST,
-      "A blog with this title already exists."
-    );
+    if (duplicateBlog) {
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        "A blog with this title already exists."
+      );
+    }
   }
 
   const slug = payload.title

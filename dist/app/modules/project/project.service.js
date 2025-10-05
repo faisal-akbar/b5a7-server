@@ -140,14 +140,16 @@ const updateProject = (id, payload) => __awaiter(void 0, void 0, void 0, functio
     if (!existingProject) {
         throw new AppError_1.default(http_status_codes_1.default.NOT_FOUND, "Project Not Found");
     }
-    const duplicateProject = yield db_1.prisma.project.findFirst({
-        where: {
-            title: payload.title,
-            id: { not: id },
-        },
-    });
-    if (duplicateProject) {
-        throw new AppError_1.default(http_status_codes_1.default.BAD_REQUEST, "A project with this title already exists.");
+    if (payload.title) {
+        const duplicateProject = yield db_1.prisma.project.findFirst({
+            where: {
+                title: payload.title,
+                id: { not: id },
+            },
+        });
+        if (duplicateProject) {
+            throw new AppError_1.default(http_status_codes_1.default.BAD_REQUEST, "A project with this title already exists.");
+        }
     }
     const slug = payload.title
         ? (0, slugify_1.default)(payload.title, { lower: true })
